@@ -4,6 +4,7 @@ public class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllersWithViews();
+        AppConfiguration = builder.Configuration;
 
         WebApplication app = builder.Build();
         ConfigureDeveloppementOptions(app);
@@ -29,4 +30,6 @@ public class Program
             app.UseHsts();
         }
     }
+
+    public static ConfigurationManager? AppConfiguration;
 }
