@@ -1,9 +1,19 @@
+using App.Data;
+using Microsoft.EntityFrameworkCore;
+
 public class Program
 {
     public static void Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllersWithViews();
+        builder.Services.AddDbContext<AppDbContext>(
+            dbContextOptions => dbContextOptions
+            .UseMySql(builder.Configuration["mysql-con"], new MySqlServerVersion(new Version(8, 0, 27)))
+            .LogTo(Console.Write, LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
+            );
         AppConfiguration = builder.Configuration;
 
         WebApplication app = builder.Build();
@@ -18,6 +28,11 @@ public class Program
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}"
         );
+
+        using (var scope = app.Services.CreateScope())
+        {
+            scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.EnsureCreated();
+        }
 
         app.Run();
     }
