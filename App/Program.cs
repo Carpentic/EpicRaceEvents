@@ -7,6 +7,7 @@ public class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllersWithViews();
+        builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
         builder.Services.AddDbContext<AppDbContext>(
             dbContextOptions => dbContextOptions
             .UseMySql(builder.Configuration["mysql-con"], new MySqlServerVersion(new Version(8, 0, 27)))
@@ -14,7 +15,6 @@ public class Program
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors()
             );
-        AppConfiguration = builder.Configuration;
 
         WebApplication app = builder.Build();
         ConfigureDeveloppementOptions(app);
@@ -45,6 +45,4 @@ public class Program
             app.UseHsts();
         }
     }
-
-    public static ConfigurationManager? AppConfiguration;
 }
