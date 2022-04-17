@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#nullable disable
+
+using System.ComponentModel.DataAnnotations;
 
 namespace App.Models.DatabaseModels;
 
@@ -11,17 +13,17 @@ public class Vehicule
         #region Category Infos
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Name is required")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "Color is required")]
-        public string? Color { get; set; }
+        public string Color { get; set; }
 
         [DataType(DataType.Text)]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [DataType(DataType.ImageUrl)]
-        public string? Image { get; set; }
+        public string Image { get; set; }
         #endregion
     }
 
@@ -34,20 +36,20 @@ public class Vehicule
 
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Brand is required.")]
-    public string? Brand { get; set; }
+    public string Brand { get; set; }
 
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Model is required.")]
-    public string? Model { get; set; }
+    public string Model { get; set; }
 
     [DataType(DataType.ImageUrl)]
-    public string? Image { get; set; }
+    public string Image { get; set; }
 
     [Required(ErrorMessage = "Power is required.")]
     [Range(0, uint.MaxValue, ErrorMessage = "Please enter a valid number.")]
     public uint Power { get; set; }
     #endregion
 
-    public List<AvailableCategory>? Categories { get; set; }
-    public List<Driver>? PossessedBy { get; set; }
+    public virtual List<AvailableCategory> Categories { get; set; }
+    public virtual List<Driver> PossessedBy { get; set; }
 }
