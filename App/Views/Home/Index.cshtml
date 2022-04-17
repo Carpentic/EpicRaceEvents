@@ -1,8 +1,84 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model App.Models.ViewModels.Home.IndexModel
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+<asp:Timer ID="timer1" runat="server"
+		   Interval="1000" OnTick="timer1_tick">
+</asp:Timer>
+
+<div class="text-center">
+	<img src="https://i.imgur.com/D0p68YB.png" class="rounded" />
+	<h1></h1>
+</div>
+
+@if (Model.NextRaces.Count > 0)
+{
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<div id="myCarousel" class="carousel slide">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			@for (int i = 0; i < Model.NextRaces.Count; i++)
+			{
+				<li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+			}
+		</ol>
+
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			@for (int i = 0; i < Model.NextRaces.Count; i++)
+			{
+				var race = Model.NextRaces.ElementAt(i);
+				<div class="item @(i == 0 ? "active" : "")">
+					<img src="@race.Image" />
+					<div class="carousel-caption">
+						<h2>@race.Name</h2>
+					</div>
+				</div>
+			}
+		</div>
+
+		<!-- Controls -->
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
+	</div>
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+	@if (Model.NextRaces.Count > 0)
+	{
+		var next = @Model.NextRaces.FirstOrDefault();
+		<p class="h1">Next race the @next!.EventDate.ToShortDateString() at @next!.EventDate.TimeOfDay.</p>
+	}
+	else
+	{
+		<p class="h1 text-capitalize">No races planned at the moment !</p>
+	}
+	@if (Model.LastRaceResult.Count != 0)
+	{
+		// FIXME : Table can be inside the footer when in full screen.
+		<table>
+			<tr>
+				<td>Position</td>
+				<td>Driver</td>
+				<td>Vehicule</td>
+			</tr>
+			@foreach (var result in Model.LastRaceResult)
+			{
+				<tr>
+					<td>@result.Position</td>
+					<td>@String.Format("{0} {1}", result.Driver.FirstName, result.Driver.LastName)</td>
+					<td>@String.Format("{0} {1}", result.Vehicule.Brand, result.Vehicule.Model)</td>
+				</tr>
+			}
+		</table>
+	}
 </div>
