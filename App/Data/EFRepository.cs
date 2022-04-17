@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace App.Data;
 
-public class EFRepository<_Ty> : IRepository<_Ty> where _Ty : class
+public class EFRepository : IRepository
 {
     private readonly AppDbContext _context;
 
@@ -12,47 +11,49 @@ public class EFRepository<_Ty> : IRepository<_Ty> where _Ty : class
         _context = dbContext;
     }
 
-    public void Add(_Ty entity)
+    public void Add<_Ty>(_Ty entity) where _Ty : class
     {
-        _context.Set<_Ty>().Add(entity);
+        _context.Add(entity);
     }
 
-    public bool Any(Expression<Func<_Ty, bool>> predicate)
+    public bool Any<_Ty>(Expression<Func<_Ty, bool>> predicate) where _Ty : class
     {
         return _context.Set<_Ty>().Any(predicate);
     }
 
-    public void Delete(_Ty entity)
+    public void Delete<_Ty>(_Ty entity) where _Ty : class
     {
-        _context.Set<_Ty>().Remove(entity);
+        _context.Remove(entity);
     }
 
-    public void DeleteBy(Expression<Func<_Ty, bool>> predicate)
+    public void DeleteBy<_Ty>(Expression<Func<_Ty, bool>> predicate) where _Ty : class
     {
-        _context.Remove(predicate);
+        var entities = _context.Set<_Ty>().Where(predicate);
+        foreach (var entity in entities)
+            _context.Remove(entity);
     }
 
-    public void Edit(_Ty entity)
+    public void Edit<_Ty>(_Ty entity) where _Ty : class
     {
-        _context.Entry(entity).State = EntityState.Modified;
+        _context.Update(entity);
     }
 
-    public IQueryable<_Ty> GetAll()
+    public IQueryable<_Ty> GetAll<_Ty>() where _Ty : class
     {
         return _context.Set<_Ty>().AsQueryable();
     }
 
-    public IQueryable<_Ty> GetBy(Expression<Func<_Ty, bool>> predicate)
+    public IQueryable<_Ty> GetBy<_Ty>(Expression<Func<_Ty, bool>> predicate) where _Ty : class
     {
         return _context.Set<_Ty>().Where(predicate);
     }
 
-    public void Update()
+    public void Update<_Ty>()
     {
         _context.SaveChanges();
     }
 
-    public Task UpdateAsync()
+    public Task UpdateAsync<_Ty>()
     {
         return _context.SaveChangesAsync();
     }
