@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#nullable disable
+
+using System.ComponentModel.DataAnnotations;
 
 namespace App.Models.DatabaseModels;
 
@@ -12,14 +14,14 @@ public class Driver
     [MinLength(2, ErrorMessage = "Fist name must be more than 2 characters.")]
     [MaxLength(30, ErrorMessage = "Fist name must be less than 30 characters.")]
     [Display(Name = "First Name")]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; }
 
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Last name is required.")]
     [MinLength(2, ErrorMessage = "Last name must be more than 2 characters.")]
     [MaxLength(30, ErrorMessage = "Last name must be less than 30 characters.")]
     [Display(Name = "Last Name")]
-    public string? LastName { get; set; }
+    public string LastName { get; set; }
 
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Birth date is required.")]
@@ -29,15 +31,15 @@ public class Driver
 
     [DataType(DataType.EmailAddress)]
     [Required(ErrorMessage = "Email is required.")]
-    public string? Email { get; set; }
+    public string Email { get; set; }
 
     [DataType(DataType.Password)]
     [Required(ErrorMessage = "Password is required.")]
-    public string? Password { get; set; }
+    public string Password { get; set; }
     #endregion
 
     #region Driver Racing Infos
-    public List<Vehicule>? Vehicules { get; set; }
-    public List<Race>? Races { get; set; }
+    public virtual List<Vehicule> Vehicules { get; set; }
+    public virtual List<Race> Races { get; set; }
     #endregion
 }
