@@ -14,6 +14,7 @@ public class Program
             .LogTo(Console.Write, LogLevel.Information)
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors()
+            .UseLazyLoadingProxies()
             );
 
         WebApplication app = builder.Build();
