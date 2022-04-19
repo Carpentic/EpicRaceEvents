@@ -10,11 +10,13 @@ public class AccountController : Controller
 {
     private readonly UserManager<Driver> _userManager;
     private readonly SignInManager<Driver> _signInManager;
+    private readonly EmailService.ISender _emailSender;
 
-    public AccountController(UserManager<Driver> userManager, SignInManager<Driver> signInManager)
+    public AccountController(UserManager<Driver> userManager, SignInManager<Driver> signInManager, EmailService.ISender sender)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _emailSender = sender;
     }
 
     [HttpGet]
@@ -48,7 +50,30 @@ public class AccountController : Controller
             }
             return View(userModel);
         }
+
+        string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        string link = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+
+        EmailService.Message message = new EmailService.Message(new string[] { user.Email }, "Click here to confirm your email : ", link, null);
+        await _emailSender.SendEmailAsync(message);
+
         return RedirectToAction(nameof(HomeController.Index), "Home");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ConfirmEmail(string token, string email)
+    {
+        Driver user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return View("Error");
+
+        IdentityResult result = await _userManager.ConfirmEmailAsync(user, token);
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, false);
+            return View(nameof(ConfirmEmail));
+        }
+        return View("Error");
     }
 
     [HttpGet]
