@@ -92,16 +92,94 @@ public class AccountController : Controller
             return View(userModel);
         }
 
-        var result = await _signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, userModel.RememberMe, false);
+        var result = await _signInManager.PasswordSignInAsync(userModel.Email, userModel.Password, userModel.RememberMe, lockoutOnFailure: true);
         if (result.Succeeded)
         {
             return RedirectToLocal(returnUrl);
+        }
+        else if (result.IsLockedOut)
+        {
+            string forgotPassLink = Url.Action(nameof(ForgotPassword), "Account", new { }, Request.Scheme);
+            string content = string.Format("Your account is locked out, to reset your password, please click this link : {0}", forgotPassLink);
+
+            EmailService.Message message = new EmailService.Message(new string[] { userModel.Email }, "EpicRaceEvents - Account locked", content, null);
+            await _emailSender.SendEmailAsync(message);
+
+            ModelState.AddModelError("", "The account is locked out ! Check your email to reset your password.");
+            return View();
         }
         else
         {
             ModelState.AddModelError("", "Invalid UserName or Password");
             return View();
         }
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(Models.ViewModels.Account.ForgotPasswordModel forgotPasswordModel)
+    {
+        if (!ModelState.IsValid)
+            return View(forgotPasswordModel);
+
+        var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
+        if (user == null)
+            return RedirectToAction(nameof(ForgotPasswordConfirmation));
+
+        string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        string callback = Url.Action(nameof(ResetPassword), "Account", new { token, email = user.Email }, Request.Scheme);
+        string text = string.Format("Click here to reset your password : {0}", callback);
+        EmailService.Message message = new EmailService.Message(new string[] { user.Email }, "EpicRaceEvents - Reset password", text, null);
+
+        await _emailSender.SendEmailAsync(message);
+        return RedirectToAction(nameof(ForgotPasswordConfirmation));
+    }
+
+    public IActionResult ForgotPasswordConfirmation()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ResetPassword(string token, string email)
+    {
+        var model = new Models.ViewModels.Account.ResetPasswordModel { Token = token, Email = email };
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPassword(Models.ViewModels.Account.ResetPasswordModel resetPasswordModel)
+    {
+        if (!ModelState.IsValid)
+            return View(resetPasswordModel);
+
+        Driver user = await _userManager.FindByEmailAsync(resetPasswordModel.Email);
+        if (user == null)
+            RedirectToAction(nameof(ResetPasswordConfirmation));
+
+        IdentityResult resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
+        if (!resetPassResult.Succeeded)
+        {
+            foreach (var error in resetPassResult.Errors)
+            {
+                ModelState.TryAddModelError(error.Code, error.Description);
+            }
+            return View();
+        }
+        return RedirectToAction(nameof(ResetPasswordConfirmation));
+    }
+
+    [HttpGet]
+    public IActionResult ResetPasswordConfirmation()
+    {
+        return View();
     }
 
     [HttpPost]
