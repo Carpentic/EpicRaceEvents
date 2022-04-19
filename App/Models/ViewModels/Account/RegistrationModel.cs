@@ -1,13 +1,11 @@
 ﻿#nullable disable
 
-using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Models.DatabaseModels;
+namespace App.Models.ViewModels.Account;
 
-public class Driver : IdentityUser
+public class RegistrationModel
 {
-    #region Driver Personnal Infos
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "First name is required.")]
     [MinLength(2, ErrorMessage = "Fist name must be more than 2 characters.")]
@@ -28,10 +26,19 @@ public class Driver : IdentityUser
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateTime BirthDate { get; set; }
 
-    #endregion
+    [Required]
+    [EmailAddress]
+    [Display(Name = "Email")]
+    public string Email { get; set; }
 
-    #region Driver Racing Infos
-    public virtual List<Vehicule> Vehicules { get; set; }
-    public virtual List<Race> Races { get; set; }
-    #endregion
+    [Required]
+    [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+    [DataType(DataType.Password)]
+    [Display(Name = "Password")]
+    public string Password { get; set; }
+
+    [DataType(DataType.Password)]
+    [Display(Name = "Confirm password")]
+    [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+    public string ConfirmPassword { get; set; }
 }
