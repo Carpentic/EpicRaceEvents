@@ -1,0 +1,12 @@
+﻿<h1 class="align-content-center">Welcome @User.Identity!.Name to your account !</h1>
+
+<p>
+	From here, you can :
+</p>
+
+<p>
+	<a asp-action="ResetPassword">Reset your password</a>
+	<form id="logoutForm" asp-controller="Account" asp-action="Logout">
+		<button id="logout" type="submit">Logout</button>
+	</form>
+</p>
