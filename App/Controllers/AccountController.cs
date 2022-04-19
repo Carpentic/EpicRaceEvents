@@ -118,9 +118,67 @@ public class AccountController : Controller
             ModelState.AddModelError("", "The account is locked out ! Check your email to reset your password.");
             return View();
         }
+        else if (result.RequiresTwoFactor)
+        {
+            return RedirectToAction(nameof(LoginTwoStep), new { userModel.Email, userModel.RememberMe, returnUrl });
+        }
         else
         {
             ModelState.AddModelError("", "Invalid UserName or Password");
+            return View();
+        }
+    }
+    #endregion
+
+    #region Login2Step
+    [HttpGet]
+    public async Task<IActionResult> LoginTwoStep(string email, bool rememberMe, string returnUrl = null)
+    {
+        if (email == null)
+            return View(nameof(Error));
+
+        Driver user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return View(nameof(Error));
+
+        IList<string> providers = await _userManager.GetValidTwoFactorProvidersAsync(user);
+        if (!providers.Contains("Email"))
+            return View(nameof(Error));
+
+        string token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+        string text = string.Format("Your security code is : {0}", token);
+
+        EmailService.Message message = new EmailService.Message(new string[] { email }, "EpicRaceEvents - 2FA Code", text, null);
+        await _emailSender.SendEmailAsync(message);
+
+        ViewData["ReturnUrl"] = returnUrl;
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> LoginTwoStep(Models.ViewModels.Account.TwoFactorAuthModel twoStepModel, string returnUrl = null)
+    {
+        if (!ModelState.IsValid)
+            return View(twoStepModel);
+
+        Driver user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+        if (user == null)
+            return RedirectToAction(nameof(Error));
+
+        var result = await _signInManager.TwoFactorSignInAsync("Email", twoStepModel.TwoFactorCode, twoStepModel.RememberMe, rememberClient: false);
+        if (result.Succeeded)
+        {
+            return RedirectToLocal(returnUrl);
+        }
+        else if (result.IsLockedOut)
+        {
+            ModelState.AddModelError("", "The account is locked out ! Check your email to reset your password.");
+            return View();
+        }
+        else
+        {
+            ModelState.AddModelError("", "Invalid Login Attempt");
             return View();
         }
     }
@@ -211,5 +269,11 @@ public class AccountController : Controller
             return Redirect(returnUrl);
         else
             return RedirectToAction(nameof(HomeController.Index), "Home");
+    }
+
+    [HttpGet]
+    public IActionResult Error()
+    {
+        return View();
     }
 }
