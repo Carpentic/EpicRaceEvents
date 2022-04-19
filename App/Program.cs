@@ -1,4 +1,5 @@
 using App.Data;
+using App.Models.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
 
 public class Program
@@ -16,6 +17,8 @@ public class Program
             .EnableDetailedErrors()
             .UseLazyLoadingProxies()
             );
+        builder.Services.AddDefaultIdentity<Driver>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddEntityFrameworkStores<AppDbContext>();
 
         WebApplication app = builder.Build();
         ConfigureDeveloppementOptions(app);
@@ -24,6 +27,7 @@ public class Program
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
+        app.UseAuthentication();
 
         app.MapControllerRoute(
             name: "default",

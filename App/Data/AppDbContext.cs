@@ -1,13 +1,15 @@
-﻿using App.Models.DatabaseModels;
+﻿#nullable disable
+
+using App.Models.DatabaseModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<Driver>
 {
-    public DbSet<Race>? Races { get; set; }
-    public DbSet<Driver>? Drivers { get; set; }
-    public DbSet<Vehicule>? Vehicules { get; set; }
+    public DbSet<Race> Races { get; set; }
+    public DbSet<Vehicule> Vehicules { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -16,5 +18,6 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
     }
 }
