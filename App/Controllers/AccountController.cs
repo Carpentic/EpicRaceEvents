@@ -25,6 +25,7 @@ public class AccountController : Controller
         return View();
     }
 
+    #region Register
     [HttpGet]
     public IActionResult Register()
     {
@@ -47,7 +48,7 @@ public class AccountController : Controller
         user.UserName = userModel.Email;
         user.Email = userModel.Email;
 
-        var result = await _userManager.CreateAsync(user, userModel.Password);
+        IdentityResult result = await _userManager.CreateAsync(user, userModel.Password);
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -59,8 +60,9 @@ public class AccountController : Controller
 
         string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         string link = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+        string text = string.Format("Click here to confirm your email: {0}", link);
 
-        EmailService.Message message = new EmailService.Message(new string[] { user.Email }, "Click here to confirm your email : ", link, null);
+        EmailService.Message message = new EmailService.Message(new string[] { user.Email }, "EpicRaceEvents - Account confirmation", text, null);
         await _emailSender.SendEmailAsync(message);
 
         return RedirectToAction(nameof(HomeController.Index), "Home");
@@ -81,7 +83,9 @@ public class AccountController : Controller
         }
         return View("Error");
     }
+    #endregion
 
+    #region Login
     [HttpGet]
     public IActionResult Login(string returnUrl)
     {
@@ -120,7 +124,9 @@ public class AccountController : Controller
             return View();
         }
     }
+    #endregion
 
+    #region Forgot/Reset Password
     [HttpGet]
     public IActionResult ForgotPassword()
     {
@@ -134,7 +140,7 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(forgotPasswordModel);
 
-        var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
+        Driver user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
         if (user == null)
             return RedirectToAction(nameof(ForgotPasswordConfirmation));
 
@@ -187,7 +193,9 @@ public class AccountController : Controller
     {
         return View();
     }
+    #endregion
 
+    #region Logout
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
@@ -195,6 +203,7 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction(nameof(HomeController.Index), "Home");
     }
+    #endregion
 
     private IActionResult RedirectToLocal(string returnUrl)
     {
