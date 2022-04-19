@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32120.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{55C17DBE-780E-42C1-8AF7-0273DEF175C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{55C17DBE-780E-42C1-8AF7-0273DEF175C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C2C37FA9-5CEB-45F2-A372-33187424D889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{C2C37FA9-5CEB-45F2-A372-33187424D889}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{3C2D34F7-1EC0-4F6B-BE53-F5C6DF6B0BDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C2C37FA9-5CEB-45F2-A372-33187424D889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2C37FA9-5CEB-45F2-A372-33187424D889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2C37FA9-5CEB-45F2-A372-33187424D889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C2D34F7-1EC0-4F6B-BE53-F5C6DF6B0BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C2D34F7-1EC0-4F6B-BE53-F5C6DF6B0BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C2D34F7-1EC0-4F6B-BE53-F5C6DF6B0BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2D34F7-1EC0-4F6B-BE53-F5C6DF6B0BDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
