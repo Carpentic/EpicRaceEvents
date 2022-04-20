@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using App.Models.DatabaseModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,12 +28,14 @@ public class AccountController : Controller
 
     #region Register
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Register()
     {
         return View();
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(Models.ViewModels.Account.RegistrationModel userModel)
     {
@@ -87,6 +90,7 @@ public class AccountController : Controller
 
     #region Login
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login(string returnUrl)
     {
         ViewData["ReturnUrl"] = returnUrl;
@@ -94,6 +98,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(Models.ViewModels.Account.LoginModel userModel, string returnUrl)
     {
@@ -255,6 +260,7 @@ public class AccountController : Controller
 
     #region Logout
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
@@ -272,6 +278,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Error()
     {
         return View();
