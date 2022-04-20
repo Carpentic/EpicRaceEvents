@@ -2,39 +2,29 @@
 
 @{
 	ViewData["Title"] = "Home Page";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<asp:Timer ID="timer1" runat="server"
-		   Interval="1000" OnTick="timer1_tick">
-</asp:Timer>
-
-<div class="text-center">
-	<img src="https://i.imgur.com/D0p68YB.png" class="rounded" />
-	<h1></h1>
+<div class=text-center>
+	<img src="https://i.imgur.com/D0p68YB.png" class="rounded w-75 pb-3" />
 </div>
 
 @if (Model.NextRaces.Count > 0)
 {
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-	<div id="myCarousel" class="carousel slide">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
+	<div id="carousel" class="carousel slide pb-3" data-bs-ride="carousel">
+		<div class="carousel-indicators">
 			@for (int i = 0; i < Model.NextRaces.Count; i++)
 			{
-				<li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+				<button type="button" data-bs-target="#carousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")"></button>
 			}
-		</ol>
+		</div>
 
-		<!-- Wrapper for slides -->
 		<div class="carousel-inner">
 			@for (int i = 0; i < Model.NextRaces.Count; i++)
 			{
 				var race = Model.NextRaces.ElementAt(i);
-				<div class="item @(i == 0 ? "active" : "")">
-					<img src="@race.Image" />
+				<div class="carousel-item @(i == 0 ? "active" : "")">
+					<img src="@race.Image" class="d-block w-100" />
 					<div class="carousel-caption">
 						<h2>@race.Name</h2>
 					</div>
@@ -43,42 +33,59 @@
 		</div>
 
 		<!-- Controls -->
-		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
-			<span class="icon-prev"></span>
-		</a>
-		<a class="right carousel-control" href="#myCarousel" data-slide="next">
-			<span class="icon-next"></span>
-		</a>
+		<button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		</button>
 	</div>
 }
 
-<div class="text-center">
+<div class="text-center pb-3">
 	@if (Model.NextRaces.Count > 0)
 	{
 		var next = @Model.NextRaces.FirstOrDefault();
-		<p class="h1">Next race the @next!.EventDate.ToShortDateString() at @next!.EventDate.TimeOfDay.</p>
+		<p class="h1">Next race : @next!.Name the @next!.EventDate.ToShortDateString() at @next!.EventDate.TimeOfDay</p>
 	}
 	else
 	{
 		<p class="h1 text-capitalize">No races planned at the moment !</p>
 	}
-	@if (Model.LastRaceResult.Count != 0)
-	{
-		// FIXME : Table can be inside the footer when in full screen.
-		<table>
+</div>
+
+@if (Model.LastRaceResult.Count != 0)
+{
+	<p>Results for @Model.LastRaceResult.FirstOrDefault()!.Race.Name :</p>
+	<table class="table">
+		<thead>
 			<tr>
-				<td>Position</td>
-				<td>Driver</td>
-				<td>Vehicule</td>
+				<th>
+					Position
+				</th>
+				<th>
+					Driver
+				</th>
+				<th>
+					Vehicule
+				</th>
 			</tr>
+		</thead>
+		<tbody>
 			@foreach (var result in Model.LastRaceResult)
 			{
 				<tr>
-					<td>@result.Position</td>
-					<td>@String.Format("{0} {1}", result.Driver.FirstName, result.Driver.LastName)</td>
-					<td>@String.Format("{0} {1}", result.Vehicule.Brand, result.Vehicule.Model)</td>
+					<td>
+						@result.Position
+					</td>
+					<td>
+						@string.Format("{0} {1}", result.Driver.FirstName, result.Driver.LastName)
+					</td>
+					<td>
+						<a asp-action="Details" asp-controller="Vehicules" asp-route-id="@result.Vehicule.Id">@string.Format("{0} {1}", result.Vehicule.Brand, result.Vehicule.Model)</a>
+					</td>
 				</tr>
 			}
-		</table>
-	}
-</div>
+		</tbody>
+	</table>
+}
