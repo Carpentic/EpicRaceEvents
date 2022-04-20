@@ -1,7 +1,9 @@
 using App.CustomTokensProvider;
 using App.Data;
 using App.Models.DatabaseModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 public class Program
@@ -67,6 +69,17 @@ public class Program
             .GetSection("EmailConfiguration")
             .Get<EmailService.Config>()
         );
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.LogoutPath = "/Account/Logout";
+            options.AccessDeniedPath = "/Account/Error";
+            options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+        });
+        builder.Services.AddMvc(options =>
+        {
+            options.Filters.Add(new AuthorizeFilter());
+        });
         builder.Services.AddScoped<EmailService.ISender, EmailService.Sender>();
         builder.Services.AddControllersWithViews();
     }
