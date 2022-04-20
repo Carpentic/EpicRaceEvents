@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using App.Models.Validators;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Models.ViewModels.Account;
@@ -22,6 +23,7 @@ public class RegistrationModel
 
     [DataType(DataType.Date)]
     [Required(ErrorMessage = "Birth date is required.")]
+    [AgeValidator(16, ErrorMessage = "You must be at least 16 to register.")]
     [Display(Name = "Date of Birth")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     public DateTime BirthDate { get; set; }
