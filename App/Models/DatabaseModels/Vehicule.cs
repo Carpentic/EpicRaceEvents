@@ -43,9 +43,13 @@ public class Vehicule
     [DataType(DataType.ImageUrl)]
     public string? Image { get; set; }
 
-    [Required(ErrorMessage = "Power is required.")]
+    [Required(ErrorMessage = "PowerLevel is required.")]
     [Range(0, uint.MaxValue, ErrorMessage = "Please enter a valid number.")]
-    public uint Power { get; set; }
+    public uint PowerLevel { get; set; }
+
+    [Required(ErrorMessage = "HorsePower is required.")]
+    [Range(0, uint.MaxValue, ErrorMessage = "Please enter a valid number.")]
+    public uint HorsePower { get; set; }
     #endregion
 
     public List<AvailableCategory>? Categories { get; set; }
