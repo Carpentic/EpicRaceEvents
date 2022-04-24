@@ -1,14 +1,17 @@
-﻿using App.Models.DatabaseModels;
+﻿#nullable disable
+
+using App.Models.DatabaseModels;
+
 namespace App.Data;
 
-public class AppDbContextExtension
+public static class AppDbContextExtension
 {
-    public List<Vehicule.AvailableCategory> Categorie;
-    public List<Vehicule> Vehicules;
+    public static List<Vehicule.AvailableCategory> Categories;
+    public static List<Vehicule> Vehicules;
 
-    public AppDbContextExtension()
+    public static void Seed(this IRepository repo)
     {
-        Categorie = new List<Vehicule.AvailableCategory>
+        Categories = new List<Vehicule.AvailableCategory>
         {
             new Vehicule.AvailableCategory
             {
@@ -99,11 +102,11 @@ public class AppDbContextExtension
                 Id = 1,
                 Brand = "Ferrari",
                 Model = "F40",
-                BuildDate = new DateTime(1987),
+                BuildDate = new DateTime(1987, 01, 01),
                 HorsePower = 478,
                 PowerLevel = 7,
                 Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/F40_Ferrari_20090509.jpg/280px-F40_Ferrari_20090509.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Super Car" && x.Name=="Italian Classic")
+                Categories = Categories.FindAll(x => x.Name == "Super Car" && x.Name=="Italian Classic")
             },
 
             new Vehicule
@@ -111,11 +114,11 @@ public class AppDbContextExtension
                 Id = 2,
                 Brand = "Lamborghini",
                 Model = "Huracan",
-                BuildDate = new DateTime(2014),
+                BuildDate = new DateTime(2014, 01, 01),
                 HorsePower = 650,
                 PowerLevel = 7,
                 Image = "https://upload.wikimedia.org/wikipedia/commons/3/31/2014-03-04_Geneva_Motor_Show_1377.JPG",
-                Categories = Categorie.FindAll(x => x.Name == "Super Car")
+                Categories = Categories.FindAll(x => x.Name == "Super Car")
             },
 
             new Vehicule
@@ -123,11 +126,11 @@ public class AppDbContextExtension
                 Id = 3,
                 Brand = "Ford",
                 Model = "Mustang'67",
-                BuildDate = new DateTime(1967),
+                BuildDate = new DateTime(1967, 01, 01),
                 HorsePower = 320,
                 PowerLevel = 3,
                 Image = "https://www.mustangspecs.com/wp-content/uploads/2019/10/1967-Mustang-In-Depth-Guide.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Muscle Car" && x.Name == "American Legend")
+                Categories = Categories.FindAll(x => x.Name == "Muscle Car" && x.Name == "American Legend")
             },
 
             new Vehicule
@@ -135,11 +138,11 @@ public class AppDbContextExtension
                 Id = 4,
                 Brand = "Dodge",
                 Model = "Charger R/T",
-                BuildDate = new DateTime(2021),
+                BuildDate = new DateTime(2021, 01, 01),
                 HorsePower = 370,
                 PowerLevel = 5,
                 Image = "https://overtake-images.sfo2.digitaloceanspaces.com/2021/Dodge/Charger/DG021_030CHbfqds5i7seuipr3q45r5ds1hp3.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Muscle Car")
+                Categories = Categories.FindAll(x => x.Name == "Muscle Car")
             },
 
             new Vehicule
@@ -147,11 +150,11 @@ public class AppDbContextExtension
                 Id = 5,
                 Brand = "Pagani",
                 Model = "Huayra R",
-                BuildDate = new DateTime(2018),
+                BuildDate = new DateTime(2018, 01, 01),
                 HorsePower = 850,
                 PowerLevel = 9,
                 Image = "https://www.ccarprice.com/products/Pagani_Huayra_R_CouPe_2022.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Hyper Car")
+                Categories = Categories.FindAll(x => x.Name == "Hyper Car")
             },
 
             new Vehicule
@@ -159,11 +162,11 @@ public class AppDbContextExtension
                 Id = 6,
                 Brand = "Bugatti",
                 Model = "Chiron",
-                BuildDate = new DateTime(2019),
+                BuildDate = new DateTime(2019, 01, 01),
                 HorsePower = 1500,
                 PowerLevel = 10,
                 Image = "https://upload.wikimedia.org/wikipedia/commons/6/63/FoS20162016_0624_132444AA_%2827785299372%29.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Hyper Car")
+                Categories = Categories.FindAll(x => x.Name == "Hyper Car")
             },
 
             new Vehicule
@@ -171,11 +174,11 @@ public class AppDbContextExtension
                 Id = 7,
                 Brand = "Toyota",
                 Model = "Supra Yakuza Edition",
-                BuildDate = new DateTime(1995),
+                BuildDate = new DateTime(1995, 01, 01),
                 HorsePower = 335,
                 PowerLevel = 7,
                 Image = "https://photos.tf1.fr/1200/720/toyota-supra-paul-walker-fast-furious-11-44677f-0@1x.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Japan Race Car")
+                Categories = Categories.FindAll(x => x.Name == "Japan Race Car")
             },
 
             new Vehicule
@@ -183,11 +186,11 @@ public class AppDbContextExtension
                 Id = 8,
                 Brand = "Honda",
                 Model = "S2000 Racing",
-                BuildDate = new DateTime(2009),
+                BuildDate = new DateTime(2009, 01, 01),
                 HorsePower = 240,
                 PowerLevel = 6,
                 Image = "https://racemarket.net/oc-content/uploads/25/10442.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "Japan Race Car" && x.Name == "Race Car")
+                Categories = Categories.FindAll(x => x.Name == "Japan Race Car" && x.Name == "Race Car")
             },
 
             new Vehicule
@@ -195,11 +198,11 @@ public class AppDbContextExtension
                 Id = 9,
                 Brand = "BMW",
                 Model = "E30 ‘91",
-                BuildDate = new DateTime(1991),
+                BuildDate = new DateTime(1991, 01, 01),
                 HorsePower = 238,
                 PowerLevel = 6,
                 Image = "https://www.automobile-sportive.com/guide/bmw/325ise30/bmw-325is-e30.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "German Classic" && x.Name == "Race Car")
+                Categories = Categories.FindAll(x => x.Name == "German Classic" && x.Name == "Race Car")
             },
 
             new Vehicule
@@ -207,12 +210,28 @@ public class AppDbContextExtension
                 Id = 10,
                 Brand = "Porsche",
                 Model = "911 GT3",
-                BuildDate = new DateTime(2007),
+                BuildDate = new DateTime(2007, 01, 01),
                 HorsePower = 415,
                 PowerLevel = 7,
                 Image = "https://s1.cdn.autoevolution.com/images/gallery/PORSCHE-911-GT3--997--1192_30.jpg",
-                Categories = Categorie.FindAll(x => x.Name == "German Classic" && x.Name == "High Performance Race Car")
+                Categories = Categories.FindAll(x => x.Name == "German Classic" && x.Name == "High Performance Race Car")
             },
         };
+
+        try
+        {
+            foreach (var category in Categories)
+                repo.Add(category);
+
+            foreach (var vehicule in Vehicules)
+                repo.Add(vehicule);
+
+            repo.Update<Vehicule.AvailableCategory>();
+            repo.Update<Vehicule>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

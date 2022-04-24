@@ -38,7 +38,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.BuildDate)
+                @Html.DisplayFor(modelItem => item.BuildDate.Year)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Brand)
