@@ -1,0 +1,72 @@
+﻿@model App.Models.ViewModels.Races.Model
+
+@{
+	ViewData["Title"] = "Edit";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Race</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Race.Id" />
+			<div class="form-group">
+				<label asp-for="Race.Lattitude" class="control-label"></label>
+				<input asp-for="Race.Lattitude" class="form-control" />
+				<span asp-validation-for="Race.Lattitude" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.Longitude" class="control-label"></label>
+				<input asp-for="Race.Longitude" class="form-control" />
+				<span asp-validation-for="Race.Longitude" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.Name" class="control-label"></label>
+				<input asp-for="Race.Name" class="form-control" />
+				<span asp-validation-for="Race.Name" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.EventDate" class="control-label"></label>
+				<input asp-for="Race.EventDate" class="form-control" />
+				<span asp-validation-for="Race.EventDate" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.Image" class="control-label"></label>
+				<input asp-for="Race.Image" class="form-control" />
+				<span asp-validation-for="Race.Image" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.MaxParticipants" class="control-label"></label>
+				<input asp-for="Race.MaxParticipants" class="form-control" />
+				<span asp-validation-for="Race.MaxParticipants" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.MinAge" class="control-label"></label>
+				<input asp-for="Race.MinAge" class="form-control" />
+				<span asp-validation-for="Race.MinAge" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Race.AllowedCategories" class="control-label"></label>
+				@Html.ListBoxFor(m => m.SelectedCategories, new SelectList(Model.AllCategories, "Id", "Name"))
+				<span asp-validation-for="Race.AllowedCategories" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	}

@@ -1,0 +1,71 @@
+﻿@model App.Models.DatabaseModels.Race
+
+@{
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+	<h4>Race</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Lattitude)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Lattitude)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Longitude)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Longitude)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.EventDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.EventDate)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Image)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Image)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.MaxParticipants)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.MaxParticipants)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.MinAge)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.MinAge)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.AllowedCategories)
+		</dt>
+		<dd class="col-sm-10">
+			@foreach (var category in Model.AllowedCategories)
+			{
+				@Html.DisplayFor(model => category.Name)
+				<br />
+			}
+		</dd>
+	</dl>
+</div>
+<div>
+	<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+	<a asp-action="Index">Back to List</a>
+</div>
