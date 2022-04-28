@@ -39,6 +39,27 @@ public class RacesController : Controller
         return View(race);
     }
 
+    // GET: Races/Participate/5
+    public IActionResult Participate(uint? id)
+    {
+        // FIXME: Add vehicule choice
+        if (id == null || _repository.GetBy<Race>(race => race.Id == id).Count() == 0)
+            return NotFound();
+
+        var race = _repository.GetBy<Race>(race => race.Id == id).FirstOrDefault();
+        var user = _repository.GetBy<Driver>(driver => driver.UserName == User.Identity.Name).FirstOrDefault();
+        var otherDriversRacing = _repository.GetBy<Driver>(driver => driver.Races.Contains(race)).ToList();
+        if (DateTime.Now.Year - user.BirthDate.Year < race.MinAge || otherDriversRacing.Count + 1 > race.MaxParticipants)
+        {
+            return View();
+        }
+
+        user.Races.Add(race);
+        _repository.Edit(user);
+        _repository.Update<Driver>();
+        return RedirectToAction(nameof(Index));
+    }
+
     // GET: Races/Create
     public IActionResult Create()
     {

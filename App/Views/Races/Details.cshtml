@@ -64,8 +64,32 @@
 			}
 		</dd>
 	</dl>
+	<div id="dvMap" style="width: 500px; height: 500px"></div>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTJ9fmoHrp6XfjOkT2qMaXDY-5w5XXWs0"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			var mapOptions = {
+				center: new google.maps.LatLng(@Model.Lattitude, @Model.Longitude),
+				zoom: 10,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var infoWindow = new google.maps.InfoWindow();
+			var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(@Model.Lattitude, @Model.Longitude),
+				map: map,
+				title: "@Model.Name"
+			});
+			google.maps.event.addListener(marker, "click", function (e) {
+				infoWindow.setContent("@Model.Name");
+				infoWindow.open(map, marker);
+			});
+		}
+	</script>
 </div>
+
 <div>
 	<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-	<a asp-action="Index">Back to List</a>
+	<a asp-action="Index">Back to List</a> |
+	<a asp-action="Participate" asp-route-id="@Model?.Id">Register to the Race</a>
 </div>
