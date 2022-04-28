@@ -72,6 +72,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> ConfirmEmail(string token, string email)
     {
         Driver user = await _userManager.FindByEmailAsync(email);
@@ -137,6 +138,7 @@ public class AccountController : Controller
 
     #region Login2Step
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> LoginTwoStep(string email, bool rememberMe, string returnUrl = null)
     {
         if (email == null)
@@ -162,6 +164,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [AllowAnonymous]
     public async Task<IActionResult> LoginTwoStep(Models.ViewModels.Account.TwoFactorAuthModel twoStepModel, string returnUrl = null)
     {
         if (!ModelState.IsValid)
@@ -191,12 +194,14 @@ public class AccountController : Controller
 
     #region Forgot/Reset Password
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult ForgotPassword()
     {
         return View();
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(Models.ViewModels.Account.ForgotPasswordModel forgotPasswordModel)
     {
@@ -216,12 +221,15 @@ public class AccountController : Controller
         return RedirectToAction(nameof(ForgotPasswordConfirmation));
     }
 
+    [HttpGet]
+    [AllowAnonymous]
     public IActionResult ForgotPasswordConfirmation()
     {
         return View();
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult ResetPassword(string token, string email)
     {
         var model = new Models.ViewModels.Account.ResetPasswordModel { Token = token, Email = email };
@@ -230,6 +238,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [AllowAnonymous]
     public async Task<IActionResult> ResetPassword(Models.ViewModels.Account.ResetPasswordModel resetPasswordModel)
     {
         if (!ModelState.IsValid)
@@ -260,7 +269,6 @@ public class AccountController : Controller
 
     #region Logout
     [HttpPost]
-    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
