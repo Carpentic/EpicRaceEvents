@@ -1,4 +1,4 @@
-∩╗┐using App.Data;
+using App.Data;
 using App.Models.DatabaseModels;
 
 namespace App.Models.ViewModels.Drivers;

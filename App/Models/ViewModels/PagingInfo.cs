@@ -1,4 +1,4 @@
-∩╗┐namespace App.Models.ViewModels;
+namespace App.Models.ViewModels;
 
 public class PagingInfo
 {

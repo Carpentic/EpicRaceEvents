@@ -1,4 +1,4 @@
-∩╗┐using App.Data;
+using App.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Controllers

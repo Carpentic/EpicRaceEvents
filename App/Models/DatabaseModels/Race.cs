@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using App.Models.ValidationLayers;
 using System.ComponentModel.DataAnnotations;
 
 namespace App.Models.DatabaseModels;
@@ -19,11 +20,11 @@ public class Race
 
     #region Race Infos
     [Required(ErrorMessage = "Race lattitude is required.")]
-    [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid lattitude.")]
+    [CoordinatesValidation]
     public double Lattitude { get; set; }
 
     [Required(ErrorMessage = "Race longitude is required.")]
-    [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid longitude.")]
+    [CoordinatesValidation]
     public double Longitude { get; set; }
 
     [DataType(DataType.Text)]

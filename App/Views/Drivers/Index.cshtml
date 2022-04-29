@@ -1,66 +1,66 @@
-∩╗┐@model App.Models.ViewModels.Drivers.IndexModel
+@model App.Models.ViewModels.Drivers.IndexModel
 
 @{
-	ViewData["Title"] = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				Full Name
-			</th>
-			<th>
-				Email
-			</th>
-			<th>
-				Birth Date
-			</th>
-			<th>
-				Vehicules
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model.Drivers)
-		{
-			<tr>
-				<td>
-					@string.Format("{0} {1}", item.FirstName, item.LastName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Email)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.BirthDate)
-				</td>
-				<td>
-					@if (item.Vehicules.Count == 0)
-					{
-						<p>No vehicules found !</p>
+    <thead>
+        <tr>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Birth Date
+            </th>
+            <th>
+                Vehicules
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Drivers)
+        {
+                                <tr>
+                                    <td>
+                    @string.Format("{0} {1}", item.FirstName, item.LastName)
+                                    </td>
+                                    <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                                    </td>
+                                    <td>
+                    @if (item.Vehicules.Count == 0)
+                    {
+                                                                <p>No vehicules found !</p>
 
-					}
-					@foreach (var vehicule in item.Vehicules)
-					{
-						<a asp-action="Details" asp-controller="Vehicules" asp-route-id="@vehicule.Id">@string.Format("{0} {1}", vehicule.Brand, vehicule.Model)</a>
-					}
-				</td>
-				<td>
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a>
-					<a asp-action="Index" asp-controller="Vehicules" asp-route-id="@item.Id">Give a vehicule</a>
-				</td>
-			</tr>
-		}
-	</tbody>
+                    }
+                    @foreach (var vehicule in item.Vehicules)
+                    {
+                                                                <a asp-action="Details" asp-controller="Vehicules" asp-route-id="@vehicule.Id">@string.Format("{0} {1}", vehicule.Brand, vehicule.Model)</a>
+                    }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        <a asp-action="Index" asp-controller="Vehicules" asp-route-id="@item.Id">Give a vehicule</a>
+                                    </td>
+                                </tr>
+        }
+    </tbody>
 </table>
 
 @if (Model.PagingInfo.CurrentPage != 1)
 {
-	@Html.ActionLink("Previous Page", "Index", "Drivers", new { page = Model.PagingInfo.CurrentPage - 1 })
+    @Html.ActionLink("Previous Page", "Index", "Drivers", new { page = Model.PagingInfo.CurrentPage - 1 })
 }
 else if (Model.PagingInfo.TotalPages != Model.PagingInfo.CurrentPage)
 {
-	@Html.ActionLink("Next Page", "Index", "Drivers", new { page = Model.PagingInfo.CurrentPage + 1 })
+    @Html.ActionLink("Next Page", "Index", "Drivers", new { page = Model.PagingInfo.CurrentPage + 1 })
 }
